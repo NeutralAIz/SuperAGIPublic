@@ -1,4 +1,5 @@
 {
-    "tools": {
-    }
+  "tools": {
+    "pyppeteer-superagi": "https://github.com/NeutralAIz/pyppeteer-superagi"
+  }
 }
