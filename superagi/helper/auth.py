@@ -4,6 +4,7 @@ from fastapi_sqlalchemy import db
 
 from superagi.config.config import get_config
 from superagi.models.organisation import Organisation
+from superagi.models.project import Project
 from superagi.models.user import User
 
 
@@ -38,6 +39,21 @@ def get_user_organisation(Authorize: AuthJWT = Depends(check_auth)):
         raise HTTPException(status_code=401, detail="Unauthenticated")
     organisation = db.session.query(Organisation).filter(Organisation.id == user.organisation_id).first()
     return organisation
+
+
+def get_user_organisation_project(Authorize: AuthJWT = Depends(check_auth)):
+    """
+    Function to get the organisation of the authenticated user based on the environment.
+
+    Args:
+        Authorize (AuthJWT, optional): Instance of AuthJWT class to authorize the user. Defaults to Depends on check_auth().
+
+    Returns:
+        Organisation: Instance of Organisation class to which the authenticated user belongs.
+    """
+    organisation = get_user_organisation(AuthJWT)
+    project = db.session.query(Project).filter(Project.organisation_id == organisation.id, Project.name == "Default Project").first()
+    return project
 
 def get_current_user(Authorize: AuthJWT = Depends(check_auth)):
     env = get_config("ENV", "DEV")
