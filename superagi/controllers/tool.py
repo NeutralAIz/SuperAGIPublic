@@ -55,15 +55,17 @@ def create_tool(
         HTTPException (status_code=400): If there is an issue creating the tool.
 
     """
+    db_tool = db.session.query(Tool).filter(Tool.name == tool.name).first()
 
-    db_tool = Tool(
-        name=tool.name,
-        folder_name=tool.folder_name,
-        class_name=tool.class_name,
-        file_name=tool.file_name,
-    )
-    db.session.add(db_tool)
-    db.session.commit()
+    if db_tool != None:
+        db_tool = Tool(
+            name=tool.name,
+            folder_name=tool.folder_name,
+            class_name=tool.class_name,
+            file_name=tool.file_name,
+        )
+        db.session.add(db_tool)
+        db.session.commit()
     return db_tool
 
 
