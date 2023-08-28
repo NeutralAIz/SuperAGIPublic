@@ -8,6 +8,7 @@ from superagi.resource_manager.file_manager import FileManager
 from superagi.tools.base_tool import BaseToolkitConfiguration
 from superagi.tools.tool_response_query_manager import ToolResponseQueryManager
 from superagi.helper.encyption_helper import decrypt_data, is_encrypted
+from superagi.lib.logger import logger
 
 class DBToolkitConfiguration(BaseToolkitConfiguration):
     session = None
@@ -71,9 +72,13 @@ class ToolBuilder:
 
         # Load the module dynamically
         module = importlib.import_module(module_name)
+        def default_action(tool):
+            # do something else
+            logger.error(f"default_action: {tool.class_name}")
+            return getattr(module, "AgentManagerToolkit")
 
         # Get the class from the loaded module
-        obj_class = getattr(module, tool.class_name)
+        obj_class = getattr(module, tool.class_name, default_action(tool))
 
         # Create an instance of the class
         new_object = obj_class()
