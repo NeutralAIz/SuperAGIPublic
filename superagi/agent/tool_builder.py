@@ -81,7 +81,8 @@ class ToolBuilder:
         except:
             logger.error(f"default_action: {tool.class_name}")
             obj_class = getattr(module, "AgentManagerToolkit")
-            new_object = obj_class(tool.class_name)
+            new_object = obj_class()
+            new_object = new_object.get_dynamic_agent_tool(tool.class_name)
 
         new_object.toolkit_config = DBToolkitConfiguration(session=self.session, toolkit_id=tool.toolkit_id)
         return new_object
