@@ -76,12 +76,13 @@ class ToolBuilder:
         # Get the class from the loaded module
         try:
             obj_class = getattr(module, tool.class_name)
+            # Create an instance of the class
+            new_object = obj_class()
         except:
             logger.error(f"default_action: {tool.class_name}")
-            obj_class = getattr(module, "AgentManagerToolkit")(tool.class_name)
+            obj_class = getattr(module, "AgentManagerToolkit")
+            new_object = obj_class(tool.class_name)
 
-        # Create an instance of the class
-        new_object = obj_class()
         new_object.toolkit_config = DBToolkitConfiguration(session=self.session, toolkit_id=tool.toolkit_id)
         return new_object
 
