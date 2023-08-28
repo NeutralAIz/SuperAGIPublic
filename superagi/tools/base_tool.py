@@ -232,7 +232,6 @@ class ToolConfiguration:
 class BaseToolkit(BaseModel):
     name: str
     description: str
-    dynamicAgentsOnLoad: List[BaseTool] = None
 
     @abstractmethod
     def get_tools(self) -> List[BaseTool]:

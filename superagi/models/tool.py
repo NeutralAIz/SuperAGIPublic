@@ -60,13 +60,12 @@ class Tool(DBBaseModel):
         # Check if a record with the given tool name already exists inside a toolkit
         tool = session.query(Tool).filter_by(name=tool_name,
                                              toolkit_id=toolkit_id).first()
-        
         if tool is not None:
             # Update the attributes of the existing tool record
-            tool.folder_name = folder_name if bool(folder_name) else tool.folder_name
-            tool.class_name = class_name if bool(class_name) else tool.class_name
-            tool.file_name = file_name if bool(file_name) else tool.file_name
-            tool.description = description if bool(description) else tool.description
+            tool.folder_name = folder_name
+            tool.class_name = class_name
+            tool.file_name = file_name
+            tool.description = description
         else:
             # Create a new tool record
             tool = Tool(name=tool_name, description=description, folder_name=folder_name, class_name=class_name,

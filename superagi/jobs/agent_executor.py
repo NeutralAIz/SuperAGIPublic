@@ -3,7 +3,6 @@ from datetime import datetime, timedelta
 from sqlalchemy.orm import sessionmaker
 
 import superagi.worker
-import traceback
 from superagi.agent.agent_iteration_step_handler import AgentIterationStepHandler
 from superagi.agent.agent_tool_step_handler import AgentToolStepHandler
 from superagi.apm.event_handler import EventHandler
@@ -79,7 +78,7 @@ class AgentExecutor:
                                                                        agent_execution_id=agent_execution_id, memory=memory)
                     iteration_step_handler.execute_step()
             except Exception as e:
-                logger.info(f"Exception in executing the step: {e}\n\n{traceback.print_exc()}")
+                logger.info("Exception in executing the step: {}".format(e))
                 superagi.worker.execute_agent.apply_async((agent_execution_id, datetime.now()), countdown=15)
                 return
 
