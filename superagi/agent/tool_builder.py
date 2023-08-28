@@ -72,13 +72,13 @@ class ToolBuilder:
 
         # Load the module dynamically
         module = importlib.import_module(module_name)
-        def default_action(tool):
-            # do something else
-            logger.error(f"default_action: {tool.class_name}")
-            return getattr(module, "AgentManagerToolkit")
 
         # Get the class from the loaded module
-        obj_class = getattr(module, tool.class_name, default_action(tool))
+        try:
+            obj_class = getattr(module, tool.class_name)
+        except:
+            logger.error(f"default_action: {tool.class_name}")
+            obj_class = getattr(module, "AgentManagerToolkit")(tool.class_name)
 
         # Create an instance of the class
         new_object = obj_class()
