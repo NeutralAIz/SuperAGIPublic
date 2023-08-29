@@ -9,13 +9,12 @@ import {
   checkToolkitUpdate,
   fetchToolTemplateOverview,
   installToolkitTemplate,
-  updateMarketplaceToolTemplate,
-  returnToolkitCreator
+  updateMarketplaceToolTemplate
 } from "@/pages/api/DashboardService";
 import {EventBus} from "@/utils/eventBus";
 import ReactMarkdown from 'react-markdown';
 import axios from 'axios';
-import {returnToolkitIcon} from "@/utils/utils";
+import {returnToolkitIcon,returnToolkitCreator} from "@/utils/utils";
 
 export default function ToolkitTemplate({template, env}) {
   const [rightPanel, setRightPanel] = useState('tool_view')
