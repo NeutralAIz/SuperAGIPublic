@@ -9,7 +9,8 @@ import {
   checkToolkitUpdate,
   fetchToolTemplateOverview,
   installToolkitTemplate,
-  updateMarketplaceToolTemplate
+  updateMarketplaceToolTemplate,
+  returnToolkitCreator
 } from "@/pages/api/DashboardService";
 import {EventBus} from "@/utils/eventBus";
 import ReactMarkdown from 'react-markdown';

@@ -8,7 +8,7 @@ import styles2 from "./Market.module.css"
 import {fetchAgentTemplateConfig, installAgentTemplate} from "@/pages/api/DashboardService";
 import {EventBus} from "@/utils/eventBus";
 import axios from 'axios';
-import {loadingTextEffect} from "@/utils/utils";
+import {loadingTextEffect, returnToolkitCreator} from "@/utils/utils";
 
 export default function AgentTemplate({template, env}) {
   const [tools, setTools] = useState([])

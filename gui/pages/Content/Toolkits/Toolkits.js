@@ -1,6 +1,6 @@
 import React from 'react';
 import Image from "next/image";
-import {createInternalId, returnToolkitIcon, excludedToolkits} from "@/utils/utils";
+import {createInternalId, returnToolkitIcon, excludedToolkits, returnToolkitCreator} from "@/utils/utils";
 
 export default function Toolkits({sendToolkitData, toolkits, env}) {
   return (
