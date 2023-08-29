@@ -420,6 +420,10 @@ export const returnToolkitIcon = (toolkitName) => {
   return toolkitData[toolkitName] || '/images/custom_tool.svg';
 };
 
+export const returnToolkitCreator = (toolkitName) => {
+  return toolkitData[toolkitName] ? "SuperAGI" : "NeutralAiz";
+};
+
 export const returnResourceIcon = (file) => {
   const fileType = file.type;
 

@@ -118,7 +118,7 @@ export default function ToolkitTemplate({template, env}) {
                        src={returnToolkitIcon(template.name)} alt="tool-icon"/>
               </div>
               <span className={styles2.top_heading}>{template.name}</span>
-              <span style={{fontSize: '12px', marginTop: '15px',}} className={styles.tool_publisher}>By SuperAGI <Image
+              <span style={{fontSize: '12px', marginTop: '15px',}} className={styles.tool_publisher}>By {returnToolkitCreator(tool.name)} <Image
                 width={14} height={14} src="/images/is_verified.svg"
                 alt="is_verified"/>&nbsp;{'\u00B7'}&nbsp;<Image width={14} height={14}
                                                                 src="/images/upload_icon.svg"

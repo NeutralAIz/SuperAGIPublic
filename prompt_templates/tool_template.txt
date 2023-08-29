@@ -1,0 +1,30 @@
+import traceback
+from typing import Type, Optional
+from pydantic import BaseModel, Field
+from superagi.tools.base_tool import BaseTool
+from superagi.config.config import get_config
+from superagi.lib.logger import logger
+
+class ToolNameSchema(BaseModel):
+    Attribute1: str = Field(
+        ..., #<... | Default Value>
+        description="Attribute1 Description",
+    )
+    Attribute2: bool = Field(
+        ..., #<... | Default Value>
+        description="Attribute2 Description",
+    )
+    
+class ToolNameTool(BaseTool):
+    name = "Name of tool"
+    description = (
+        "Description of tool"
+    )
+    args_schema: Type[ToolNameSchema] = ToolNameSchema
+
+    def _execute(Attribute1: str, Attribute2: bool):
+        try:
+            #  Code goes here
+            return "Results"
+        except:
+            logger.error(f"Error message\n\n{traceback.format_exc()}")

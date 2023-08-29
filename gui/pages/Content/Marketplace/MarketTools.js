@@ -56,7 +56,7 @@ export default function MarketTools() {
                 <Image className="tool_icon" width={40} height={40} src={returnToolkitIcon(item.name)} alt="tool-icon"/>
                 <div className="ml_12 mb_8">
                     <div>{item.name}</div>
-                    <div className="color_gray lh_16">by SuperAgi&nbsp;<Image width={14} height={14} src="/images/is_verified.svg" alt="is_verified"/></div>
+                    <div className="color_gray lh_16">by {returnToolkitCreator(tool.name)}&nbsp;<Image width={14} height={14} src="/images/is_verified.svg" alt="is_verified"/></div>
                 </div>
               </div>
               <div className="text_ellipsis mt_6 color_gray">{item.description}</div>
