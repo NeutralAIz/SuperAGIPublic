@@ -1,0 +1,54 @@
+name: Publish Image
+
+on:
+  push:
+      # Publish `master` as Docker `latest` image.
+      branches:
+        - main
+  
+      # Publish `v1.2.3` tags as releases.
+      tags:
+        - v*
+jobs:
+  publish-superAGI-image:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build the superAGI Docker image
+        run: |
+         docker build . --tag ghcr.io/neutralaiz/superagi:latest
+         docker push ghcr.io/neutralaiz/superagi:latest
+  publish-superAGI-GUI-image:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build the superAGI GUI Docker image
+        run: |
+         docker build ./gui --tag ghcr.io/neutralaiz/superagi-gui:latest
+         docker push ghcr.io/neutralaiz/superagi-gui:latest
+  publish-superAGI-celery-image:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build the superAGI celery Docker image
+        run: |
+         docker build -f ./DockerfileCelery . --tag ghcr.io/neutralaiz/superagi-celery:latest
+         docker push ghcr.io/neutralaiz/superagi-celery:latest
