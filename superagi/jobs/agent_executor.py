@@ -55,14 +55,9 @@ class AgentExecutor:
                 logger.error(f"Agent execution stopped. Max iteration exceeded. {agent.id}: {agent_execution.status}")
                 return
 
-            try:
-                model_config = AgentConfiguration.get_model_api_key(session, agent_execution.agent_id, agent_config["model"])
-                model_api_key = model_config['api_key']
-                model_llm_source = model_config['provider']
-            except Exception as e:
-                logger.info(f"Unable to get model config...{e}")
-                return
-
+            model_config = AgentConfiguration.get_model_api_key(session, agent_execution.agent_id, agent_config["model"])
+            model_api_key = model_config['api_key']
+            model_llm_source = model_config['provider']
             try:
                 memory = None
                 if "OpenAI" in model_llm_source:
