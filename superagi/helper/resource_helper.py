@@ -11,73 +11,78 @@ from superagi.types.storage_types import StorageType
 
 class ResourceHelper:
     @classmethod
-    def make_written_file_resource(cls, file_name: str, agent: Agent, agent_execution: AgentExecution, session):
-        """
-        Function to create a Resource object for a written file.
+	def make_written_file_resource(cls, file_name: str, agent: Agent, agent_execution: AgentExecution, session):
+		"""
+		Function to create a Resource object for a written file.
 
-        Args:
-            file_name (str): The name of the file.
-            agent (Agent): Agent related to resource.
-            agent_execution(AgentExecution): Agent Execution related to a resource
-            session (Session): The database session.
+		Args:
+			file_name (str): The name of the file.
+			agent (Agent): Agent related to resource.
+			agent_execution(AgentExecution): Agent Execution related to a resource
+			session (Session): The database session.
 
-        Returns:
-            Resource: The Resource object.
-        """
-        storage_type = StorageType.get_storage_type(get_config("STORAGE_TYPE", StorageType.FILE.value))
-        file_parts = os.path.splitext(file_name)
-        if len(file_parts) <= 1:
-            file_name = file_name + ".txt"
-        file_extension = os.path.splitext(file_name)[1][1:]
+		Returns:
+			Resource: The Resource object.
+		"""
+		storage_type = StorageType.get_storage_type(get_config("STORAGE_TYPE", StorageType.FILE.value))
+		file_parts = os.path.splitext(file_name)
+		if len(file_parts) <= 1:
+			file_name = file_name + ".txt"
+		file_extension = os.path.splitext(file_name)[1][1:]
 
-        if file_extension in ["png", "jpg", "jpeg"]:
-            file_type = "image/" + file_extension
-        elif file_extension == "txt":
-            file_type = "application/txt"
-        else:
-            file_type = "application/misc"
+		if file_extension in ["png", "jpg", "jpeg"]:
+			file_type = "image/" + file_extension
+		elif file_extension == "txt":
+			file_type = "application/txt"
+		else:
+			file_type = "application/misc"
 
-        if agent is not None:
-            final_path = ResourceHelper.get_agent_write_resource_path(file_name, agent, agent_execution)
-        else:
-            final_path = ResourceHelper.get_resource_path(file_name)
-        file_size = os.path.getsize(final_path)
+		if agent is not None:
+			final_path = ResourceHelper.get_agent_write_resource_path(file_name, agent, agent_execution)
+		else:
+			final_path = ResourceHelper.get_resource_path(file_name)
 
-        file_path = ResourceHelper.get_agent_write_resource_path(file_name, agent, agent_execution)
 
-        logger.info("make_written_file_resource:", final_path)
-        if StorageType.get_storage_type(get_config("STORAGE_TYPE", StorageType.FILE.value)) == StorageType.S3:
-            file_path = "resources" + file_path
-        existing_resource = session.query(Resource).filter_by(
-            name=file_name,
-            path=file_path,
-            storage_type=storage_type.value,
-            type=file_type,
-            channel="OUTPUT",
-            agent_id=agent.id,
-            agent_execution_id=agent_execution.id
-        ).first()
+		file_path = ResourceHelper.get_agent_write_resource_path(file_name, agent, agent_execution)
 
-        if existing_resource:
-            # Update the existing resource attributes
-            existing_resource.size = file_size
-            session.commit()
-            session.flush()
-            return existing_resource
-        else:
-            resource = Resource(
-                name=file_name,
-                path=file_path,
-                storage_type=storage_type.value,
-                size=file_size,
-                type=file_type,
-                channel="OUTPUT",
-                agent_id=agent.id,
-                agent_execution_id=agent_execution.id
-            )
-            session.add(resource)
-            session.commit()
-            return resource
+		logger.info("make_written_file_resource:", final_path)
+		if StorageType.get_storage_type(get_config("STORAGE_TYPE", StorageType.FILE.value)) == StorageType.S3:
+			file_path = "resources" + file_path
+			file_size = S3Helper().get_file_size(file_path=file_path)
+		else:
+			file_size = os.path.getsize(final_path)
+
+
+		existing_resource = session.query(Resource).filter_by(
+			name=file_name,
+			path=file_path,
+			storage_type=storage_type.value,
+			type=file_type,
+			channel="OUTPUT",
+			agent_id=agent.id,
+			agent_execution_id=agent_execution.id
+		).first()
+
+		if existing_resource:
+			# Update the existing resource attributes
+			existing_resource.size = file_size
+			session.commit()
+			session.flush()
+			return existing_resource
+		else:
+			resource = Resource(
+				name=file_name,
+				path=file_path,
+				storage_type=storage_type.value,
+				size=file_size,
+				type=file_type,
+				channel="OUTPUT",
+				agent_id=agent.id,
+				agent_execution_id=agent_execution.id
+			)
+			session.add(resource)
+			session.commit()
+			return resource
 
     @classmethod
     def get_formatted_agent_level_path(cls, agent: Agent, path) -> object:
